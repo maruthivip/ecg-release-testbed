@@ -2,8 +2,9 @@
 
 This is a local preparation package, not a release certification. The
 [traceability matrix](traceability.csv) inventories the named slide scope,
-including cases with no fixture yet. Every result is `NOT_RUN` and the release
-build is `UNKNOWN`: no fixture has been ingested or evaluated.
+including cases with no fixture yet. Results are `NOT_RUN` or `BLOCKED` and the
+release build is `UNKNOWN`: no fixture has been evaluated. Aggregate
+inventory claims are `BLOCKED` pending authoritative item lists.
 
 ## What is here
 
@@ -27,6 +28,10 @@ orchestration with failure, rollback, event replay, dependency-direction and
 same-name/namespace traps. Its source-grounded questions include required and
 forbidden facts; it is not a deployed distributed system or a substitute for
 testing ECG cross-application ingestion and graph edges.
+
+[Messaging clients](scenarios/messaging_clients/README.md) adds kafka-python,
+aiokafka, confluent-kafka and pika scenarios, each with five source-grounded
+questions including failure and false-positive traps.
 
 Run `python -m unittest discover -s tests` from the repository root to check
 matrix structure, referenced fixture directories, source assertion anchors,

@@ -49,11 +49,11 @@ R47,Python FastAPI,fixtures/python/fastapi,GET /release/orders/{order_id} and ge
 R48,Python Django,fixtures/python/django,release/orders/<int:order_id> and get_order,URL pattern points to view,Not run,NOT_RUN,UNKNOWN
 R49,Python aiohttp,fixtures/python/aiohttp,GET /release/orders/{order_id} and get_order,route points to handler,Not run,NOT_RUN,UNKNOWN
 R50,Python Starlette,fixtures/python/starlette,/release/orders/{order_id} and get_order,route points to handler,Not run,NOT_RUN,UNKNOWN
-R51,Python kafka-python,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
-R52,Python aiokafka,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
-R53,Python confluent-kafka,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R51,Python kafka-python,scenarios/messaging_clients/kafka_python,orders.created.v1 producer and billing-v1 consumer,producer sends and consumer reads and commits v1 topic,Not run; five source-grounded cases in messaging_clients/questions.json,NOT_RUN,UNKNOWN
+R52,Python aiokafka,scenarios/messaging_clients/aiokafka,orders.created.v2 producer and fulfilment-v2 consumer,async producer sends and consumer reads and commits v2 topic,Not run; five source-grounded cases in messaging_clients/questions.json,NOT_RUN,UNKNOWN
+R53,Python confluent-kafka,scenarios/messaging_clients/confluent_kafka,orders.created.v3 producer and analytics-v3 consumer,producer sends and consumer reads and commits v3 topic,Not run; five source-grounded cases in messaging_clients/questions.json,NOT_RUN,UNKNOWN
 R54,Python faust,NOT_PREPARED,topic and stream processor,processor consumes topic,Not run,NOT_RUN,UNKNOWN
-R55,Python pika,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R55,Python pika,scenarios/messaging_clients/pika,commerce.orders exchange and billing.orders consumer queue,producer sends to exchange and consumer reads queue; binding not specified,Not run; five source-grounded cases in messaging_clients/questions.json,NOT_RUN,UNKNOWN
 R56,Python aio-pika,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
 R57,Python kombu,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
 R58,Python Celery,fixtures/python/celery,process_order task and queue_order,queue_order schedules process_order,Not run,NOT_RUN,UNKNOWN
@@ -129,9 +129,9 @@ R127,Bicep,NOT_PREPARED,resource and referenced resource,configuration expresses
 R128,Raw SQL in every language,NOT_PREPARED,query and table per language,query reads or writes table per language,Not run; split into language-specific cases,NOT_RUN,UNKNOWN
 R129,DB engine identification,NOT_PREPARED,database connection and engine,connection resolves to correct engine,Not run; split into engine-specific cases,NOT_RUN,UNKNOWN
 R130,COBOL mainframe SDK,NOT_PREPARED,program and invoked resource,program references resource,Not run,NOT_RUN,UNKNOWN
-R131,119+ pattern families,NOT_PREPARED,one case per named pattern,expected integration relationship per pattern,Not run; authoritative pattern inventory required,NOT_RUN,UNKNOWN
-R132,41+ detection switches,NOT_PREPARED,on and off runs per named switch,off output equals baseline and on detects target,Not run; authoritative switch inventory required,NOT_RUN,UNKNOWN
-R133,10+ interaction kinds,NOT_PREPARED,one fixture per named interaction kind,producer or consumer relationship per kind,Not run; authoritative interaction inventory required,NOT_RUN,UNKNOWN
+R131,119+ pattern families,NOT_PREPARED,one case per named pattern,expected integration relationship per pattern,Blocked; authoritative pattern inventory required,BLOCKED,UNKNOWN
+R132,41+ detection switches,NOT_PREPARED,on and off runs per named switch,off output equals baseline and on detects target,Blocked; authoritative switch inventory required,BLOCKED,UNKNOWN
+R133,10+ interaction kinds,NOT_PREPARED,one fixture per named interaction kind,producer or consumer relationship per kind,Blocked; complete authoritative interaction inventory required,BLOCKED,UNKNOWN
 R134,ActiveMQ,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run; split into language and client cases,NOT_RUN,UNKNOWN
 R135,TIBCO EMS,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run; split into language and client cases,NOT_RUN,UNKNOWN
 R136,Kinesis,NOT_PREPARED,stream and producer and consumer,producer writes and consumer reads stream,Not run; split into language and client cases,NOT_RUN,UNKNOWN

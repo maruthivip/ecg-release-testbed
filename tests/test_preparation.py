@@ -107,6 +107,27 @@ class PreparationTests(unittest.TestCase):
                     self.assertIn(item["anchor"], reference.read_text(encoding="utf-8"))
         self.assertGreaterEqual(len(ids), 10)
 
+    def test_messaging_questions_and_evidence(self):
+        scenario = ROOT / "scenarios" / "messaging_clients"
+        document = json.loads((scenario / "questions.json").read_text(encoding="utf-8"))
+        with (ROOT / "traceability.csv").open(encoding="utf-8", newline="") as stream:
+            matrix_ids = {row["id"] for row in csv.DictReader(stream)}
+        counts = {}
+        ids = set()
+        for case in document["cases"]:
+            with self.subTest(case=case["id"]):
+                self.assertNotIn(case["id"], ids)
+                ids.add(case["id"])
+                self.assertIn(case["matrix_id"], matrix_ids)
+                counts[case["matrix_id"]] = counts.get(case["matrix_id"], 0) + 1
+                self.assertTrue(case["question"] and case["expected"] and case["evidence"])
+                for item in case["evidence"]:
+                    reference = (scenario / item["file"]).resolve()
+                    self.assertTrue(reference.is_relative_to(scenario.resolve()))
+                    self.assertTrue(reference.is_file())
+                    self.assertIn(item["anchor"], reference.read_text(encoding="utf-8"))
+        self.assertEqual(counts, {"R51": 5, "R52": 5, "R53": 5, "R55": 5})
+
 
 if __name__ == "__main__":
     unittest.main()
