@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+<h:head><title>Order</title></h:head>
+<h:body>
+    <h:form>
+        <h:inputText value="#{orderBean.item}" />
+        <h:commandButton value="Submit" action="#{orderBean.submit}" />
+    </h:form>
+</h:body>
+</html>

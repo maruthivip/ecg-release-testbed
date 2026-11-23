@@ -1,0 +1,152 @@
+id,slide_item,repository_or_fixture,expected_nodes,expected_edges,observed_result,status,release_build
+R01,Java EJB-aware calls,fixtures/java/ejb,OrderService checkout and PricingBean total,EJB injection and checkout call to PricingBean total,Not run,NOT_RUN,UNKNOWN
+R02,Java JSF edge cases,fixtures/java/jsf,order.xhtml and orderBean item and submit,EL value and action resolve to bean members,Not run; one EL shape only,NOT_RUN,UNKNOWN
+R03,Python Azure Service Bus,fixtures/python/azure_service_bus,release-orders queue and publish_order and receive_orders,publisher sends and receiver consumes release-orders,Not run,NOT_RUN,UNKNOWN
+R04,TypeScript JavaScript Mongoose,fixtures/typescript/mongoose,ReleaseOrder model and release_orders collection,saveOrder writes and findOrder reads collection,Not run,NOT_RUN,UNKNOWN
+R05,Go GORM,fixtures/go/gorm,Order model and orders table,CreateOrder writes and FindOrder reads orders,Not run,NOT_RUN,UNKNOWN
+R06,Kotlin Spring parsing,fixtures/kotlin/spring,GET /release/orders/{id} and OrderController.findOrder,class prefix combines with method route and points to handler,Not run,NOT_RUN,UNKNOWN
+R07,JCL,fixtures/mainframe/jcl; fixtures/mainframe/pli,ORDERJOB and ORDERSTEP and ORDPROC and input and output datasets,job contains step and step invokes ORDPROC and DDs bind datasets,Not run,NOT_RUN,UNKNOWN
+R08,PL/I,fixtures/mainframe/pli; fixtures/mainframe/jcl,ORDPROC and INFILE and OUTFILE,ORDPROC reads INFILE and writes OUTFILE and JCL binds DDs,Not run,NOT_RUN,UNKNOWN
+R09,.NET Service Bus edge cases,fixtures/dotnet/azure_messaging,SendQueue and release-orders queue,SendQueue sends to queue,Not run; basic send only not edge-case coverage,NOT_RUN,UNKNOWN
+R10,.NET Event Hubs edge cases,fixtures/dotnet/azure_messaging,SendEvent and event hub producer,SendEvent sends batch to producer destination,Not run; basic batch only not edge-case coverage,NOT_RUN,UNKNOWN
+R11,Shared-DB reader links shadow mode,fixtures/sql/shared_db,release_orders and separate reader and writer sourcesets,reader reads and writer writes same table across sourcesets,Not run; requires separate applications and shared database identity,NOT_RUN,UNKNOWN
+R12,Ruby Rails,fixtures/ruby/rails,GET /release/orders/:id and OrdersController.show,route points to handler and handler reads Order,Not run,NOT_RUN,UNKNOWN
+R13,PHP Laravel,fixtures/php/laravel,GET /release/orders/{id} and OrderController.show,route points to handler and handler reads Order,Not run,NOT_RUN,UNKNOWN
+R14,Rust Axum,fixtures/rust/axum,GET /release/orders and get_order,route points to handler,Not run,NOT_RUN,UNKNOWN
+R15,Java Spring MVC,fixtures/java/spring_mvc,GET /release/orders/{id} and OrderController.getOrder,class prefix combines with method route and points to handler,Not run,NOT_RUN,UNKNOWN
+R16,Java Spring Boot,NOT_PREPARED,application and route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R17,Java Spring WebFlux,NOT_PREPARED,reactive route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R18,Java JAX-RS,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R19,Java Struts 1,NOT_PREPARED,route and action,route points to action,Not run,NOT_RUN,UNKNOWN
+R20,Java Struts 2,NOT_PREPARED,route and action,route points to action,Not run,NOT_RUN,UNKNOWN
+R21,Java Servlets,NOT_PREPARED,servlet route and handler,route points to servlet,Not run,NOT_RUN,UNKNOWN
+R22,Java JSF Facelets,fixtures/java/jsf,Facelets view and orderBean,view references bean members,Not run; one EL shape only,NOT_RUN,UNKNOWN
+R23,Java JSP,NOT_PREPARED,JSP and referenced controller,view references controller,Not run,NOT_RUN,UNKNOWN
+R24,Java JAX-WS,NOT_PREPARED,SOAP service and operation,operation belongs to service,Not run,NOT_RUN,UNKNOWN
+R25,Java Spring-WS,NOT_PREPARED,SOAP service and handler,operation points to handler,Not run,NOT_RUN,UNKNOWN
+R26,Java CXF SOAP,NOT_PREPARED,SOAP service and operation,operation points to handler,Not run,NOT_RUN,UNKNOWN
+R27,Java Apache Camel,NOT_PREPARED,route and endpoints,route connects source to destination,Not run,NOT_RUN,UNKNOWN
+R28,Java Spring Kafka,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R29,Java Kafka clients,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R30,Java Kafka Streams,NOT_PREPARED,source and sink topics and stream processor,processor connects source and sink,Not run,NOT_RUN,UNKNOWN
+R31,Java JMS MDB,NOT_PREPARED,destination and producer and message-driven bean,producer publishes and bean consumes,Not run,NOT_RUN,UNKNOWN
+R32,Java IBM MQ,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R33,Java RabbitMQ,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R34,Java JPA Hibernate,NOT_PREPARED,entity and table and repository,entity maps to table and repository accesses entity,Not run,NOT_RUN,UNKNOWN
+R35,Java iBatis,NOT_PREPARED,mapper and SQL table,mapper reads or writes table,Not run,NOT_RUN,UNKNOWN
+R36,Java MyBatis,NOT_PREPARED,mapper and SQL table,mapper reads or writes table,Not run,NOT_RUN,UNKNOWN
+R37,Java MyBatis-Plus,NOT_PREPARED,mapper and entity and table,mapper accesses entity mapped to table,Not run,NOT_RUN,UNKNOWN
+R38,Java jOOQ,NOT_PREPARED,query and table,query reads or writes table,Not run,NOT_RUN,UNKNOWN
+R39,Java DB2 embedded SQL,NOT_PREPARED,statement and DB2 table,statement accesses table,Not run,NOT_RUN,UNKNOWN
+R40,Java raw SQL,NOT_PREPARED,statement and table,statement reads or writes table,Not run,NOT_RUN,UNKNOWN
+R41,Java gRPC,NOT_PREPARED,service and RPC method and handler,service contains operation and handler implements it,Not run,NOT_RUN,UNKNOWN
+R42,Java GraphQL DGS,NOT_PREPARED,GraphQL field and resolver,field points to resolver,Not run,NOT_RUN,UNKNOWN
+R43,Java graphql-java,NOT_PREPARED,GraphQL field and resolver,field points to resolver,Not run,NOT_RUN,UNKNOWN
+R44,Java SOAP,NOT_PREPARED,service and operation and handler,operation points to handler,Not run,NOT_RUN,UNKNOWN
+R45,Java WebSocket,NOT_PREPARED,WebSocket endpoint and handler,endpoint points to handler,Not run,NOT_RUN,UNKNOWN
+R46,Python Flask,fixtures/python/flask,GET /release/orders/<order_id> and get_order,route points to handler,Not run,NOT_RUN,UNKNOWN
+R47,Python FastAPI,fixtures/python/fastapi,GET /release/orders/{order_id} and get_order,route points to handler,Not run,NOT_RUN,UNKNOWN
+R48,Python Django,fixtures/python/django,release/orders/<int:order_id> and get_order,URL pattern points to view,Not run,NOT_RUN,UNKNOWN
+R49,Python aiohttp,fixtures/python/aiohttp,GET /release/orders/{order_id} and get_order,route points to handler,Not run,NOT_RUN,UNKNOWN
+R50,Python Starlette,fixtures/python/starlette,/release/orders/{order_id} and get_order,route points to handler,Not run,NOT_RUN,UNKNOWN
+R51,Python kafka-python,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R52,Python aiokafka,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R53,Python confluent-kafka,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R54,Python faust,NOT_PREPARED,topic and stream processor,processor consumes topic,Not run,NOT_RUN,UNKNOWN
+R55,Python pika,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R56,Python aio-pika,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R57,Python kombu,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R58,Python Celery,fixtures/python/celery,process_order task and queue_order,queue_order schedules process_order,Not run,NOT_RUN,UNKNOWN
+R59,Python Event Hubs,NOT_PREPARED,event hub and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R60,Python SQLAlchemy,NOT_PREPARED,model and table and query,model maps to table and query accesses it,Not run,NOT_RUN,UNKNOWN
+R61,Python Django ORM,fixtures/python/django_orm,Order model and find_order query,query accesses Order model,Not run; database table name not declared,NOT_RUN,UNKNOWN
+R62,Python pymongo,NOT_PREPARED,collection and read and write operations,operations access collection,Not run,NOT_RUN,UNKNOWN
+R63,Python gRPC,NOT_PREPARED,service and RPC and handler,service contains operation and handler implements it,Not run,NOT_RUN,UNKNOWN
+R64,Python GraphQL Strawberry,NOT_PREPARED,GraphQL field and resolver,field points to resolver,Not run,NOT_RUN,UNKNOWN
+R65,Python GraphQL Ariadne,NOT_PREPARED,GraphQL field and resolver,field points to resolver,Not run,NOT_RUN,UNKNOWN
+R66,TypeScript JavaScript Express,fixtures/typescript/express,GET /release/orders/:id and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R67,TypeScript JavaScript NestJS,fixtures/typescript/nestjs,GET /release/orders/:id and OrdersController.getOrder,controller prefix combines with method route and points to handler,Not run,NOT_RUN,UNKNOWN
+R68,TypeScript JavaScript Next.js,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R69,TypeScript JavaScript Fastify,fixtures/typescript/fastify,GET /release/orders/:id and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R70,TypeScript JavaScript Koa,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R71,TypeScript JavaScript Hapi,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R72,TypeScript JavaScript kafkajs,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R73,TypeScript JavaScript amqplib,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R74,TypeScript JavaScript TypeORM,NOT_PREPARED,entity and table and query,entity maps to table and query accesses it,Not run,NOT_RUN,UNKNOWN
+R75,TypeScript JavaScript Sequelize,NOT_PREPARED,model and table and query,model maps to table and query accesses it,Not run,NOT_RUN,UNKNOWN
+R76,TypeScript JavaScript Prisma,NOT_PREPARED,model and table and query,model maps to table and query accesses it,Not run,NOT_RUN,UNKNOWN
+R77,TypeScript JavaScript Knex,NOT_PREPARED,query and table,query reads or writes table,Not run,NOT_RUN,UNKNOWN
+R78,TypeScript JavaScript gRPC,NOT_PREPARED,client and RPC operation,client calls operation,Not run,NOT_RUN,UNKNOWN
+R79,TypeScript JavaScript GraphQL clients,fixtures/typescript/graphql_client,GetOrder operation and fetchOrder,client invokes GraphQL operation,Not run,NOT_RUN,UNKNOWN
+R80,.NET ASP.NET,fixtures/dotnet/aspnet,GET /release/orders/{id} and OrdersController.GetOrder,controller prefix combines with method route and points to handler,Not run,NOT_RUN,UNKNOWN
+R81,.NET WCF SOAP,NOT_PREPARED,service and SOAP operation and handler,operation points to handler,Not run,NOT_RUN,UNKNOWN
+R82,.NET ASMX SOAP,NOT_PREPARED,service and SOAP operation and handler,operation points to handler,Not run,NOT_RUN,UNKNOWN
+R83,.NET SignalR,NOT_PREPARED,hub and method,hub exposes method,Not run,NOT_RUN,UNKNOWN
+R84,.NET Azure Functions bindings,NOT_PREPARED,function and trigger or binding,function connects to bound resource,Not run,NOT_RUN,UNKNOWN
+R85,.NET Service Bus,fixtures/dotnet/azure_messaging,SendQueue and release-orders queue,SendQueue sends to queue,Not run; one basic send only,NOT_RUN,UNKNOWN
+R86,.NET Event Hubs,fixtures/dotnet/azure_messaging,SendEvent and event hub producer,SendEvent sends batch to producer destination,Not run; one basic batch only,NOT_RUN,UNKNOWN
+R87,.NET RabbitMQ,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R88,.NET IBM MQ,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R89,.NET EF Core,NOT_PREPARED,entity and table and query,entity maps to table and query accesses it,Not run,NOT_RUN,UNKNOWN
+R90,.NET Dapper,NOT_PREPARED,query and table,query reads or writes table,Not run,NOT_RUN,UNKNOWN
+R91,.NET gRPC,NOT_PREPARED,service and RPC and handler,service contains operation and handler implements it,Not run,NOT_RUN,UNKNOWN
+R92,.NET GraphQL HotChocolate,NOT_PREPARED,GraphQL field and resolver,field points to resolver,Not run,NOT_RUN,UNKNOWN
+R93,.NET SOAP,NOT_PREPARED,SOAP service and operation,operation points to handler,Not run,NOT_RUN,UNKNOWN
+R94,Go net/http,fixtures/go/net_http,/release/orders and GetOrder,route points to handler,Not run,NOT_RUN,UNKNOWN
+R95,Go gin,fixtures/go/gin,GET /release/orders/:id and GetOrder,route points to handler,Not run,NOT_RUN,UNKNOWN
+R96,Go echo,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R97,Go gorilla,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R98,Go kafka-go,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R99,Go sarama,NOT_PREPARED,topic and producer and consumer,producer publishes and consumer subscribes,Not run,NOT_RUN,UNKNOWN
+R100,Go amqp091,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R101,Go MongoDB,NOT_PREPARED,collection and read and write operations,operations access collection,Not run,NOT_RUN,UNKNOWN
+R102,Go gRPC,NOT_PREPARED,service and RPC and handler,service contains operation and handler implements it,Not run,NOT_RUN,UNKNOWN
+R103,PHP Symfony,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R104,Rust Actix,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R105,C++ Crow,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R106,C++ Drogon,NOT_PREPARED,route and handler,route points to handler,Not run,NOT_RUN,UNKNOWN
+R107,Kotlin gRPC,NOT_PREPARED,service and RPC and handler,service contains operation and handler implements it,Not run,NOT_RUN,UNKNOWN
+R108,Rust gRPC,NOT_PREPARED,service and RPC and handler,service contains operation and handler implements it,Not run,NOT_RUN,UNKNOWN
+R109,Ruby PHP Rust data and messaging,NOT_PREPARED,model or destination and operations,operation reads or writes model or sends or receives destination,Not run; create separate language and integration cases,NOT_RUN,UNKNOWN
+R110,Istio,NOT_PREPARED,gateway route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R111,Ingress,NOT_PREPARED,ingress route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R112,Nginx,NOT_PREPARED,proxy route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R113,Kong,NOT_PREPARED,gateway route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R114,Envoy,NOT_PREPARED,proxy route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R115,Traefik,NOT_PREPARED,proxy route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R116,Ocelot,NOT_PREPARED,gateway route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R117,YARP,NOT_PREPARED,proxy route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R118,Apigee,NOT_PREPARED,gateway route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R119,Azure APIM,NOT_PREPARED,gateway route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R120,AWS API Gateway,NOT_PREPARED,gateway route and service,route forwards to service,Not run,NOT_RUN,UNKNOWN
+R121,Terraform,NOT_PREPARED,resource and referenced resource,configuration expresses dependency,Not run,NOT_RUN,UNKNOWN
+R122,Helm,NOT_PREPARED,rendered resource and service,configuration expresses dependency,Not run,NOT_RUN,UNKNOWN
+R123,Kustomize,NOT_PREPARED,overlay and target resource,overlay references resource,Not run,NOT_RUN,UNKNOWN
+R124,Flux,NOT_PREPARED,source and reconciliation resource,reconciliation references source,Not run,NOT_RUN,UNKNOWN
+R125,Compose,NOT_PREPARED,services and dependencies,service depends on service,Not run,NOT_RUN,UNKNOWN
+R126,CloudFormation SAM,NOT_PREPARED,resource and referenced resource,configuration expresses dependency,Not run,NOT_RUN,UNKNOWN
+R127,Bicep,NOT_PREPARED,resource and referenced resource,configuration expresses dependency,Not run,NOT_RUN,UNKNOWN
+R128,Raw SQL in every language,NOT_PREPARED,query and table per language,query reads or writes table per language,Not run; split into language-specific cases,NOT_RUN,UNKNOWN
+R129,DB engine identification,NOT_PREPARED,database connection and engine,connection resolves to correct engine,Not run; split into engine-specific cases,NOT_RUN,UNKNOWN
+R130,COBOL mainframe SDK,NOT_PREPARED,program and invoked resource,program references resource,Not run,NOT_RUN,UNKNOWN
+R131,119+ pattern families,NOT_PREPARED,one case per named pattern,expected integration relationship per pattern,Not run; authoritative pattern inventory required,NOT_RUN,UNKNOWN
+R132,41+ detection switches,NOT_PREPARED,on and off runs per named switch,off output equals baseline and on detects target,Not run; authoritative switch inventory required,NOT_RUN,UNKNOWN
+R133,10+ interaction kinds,NOT_PREPARED,one fixture per named interaction kind,producer or consumer relationship per kind,Not run; authoritative interaction inventory required,NOT_RUN,UNKNOWN
+R134,ActiveMQ,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run; split into language and client cases,NOT_RUN,UNKNOWN
+R135,TIBCO EMS,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run; split into language and client cases,NOT_RUN,UNKNOWN
+R136,Kinesis,NOT_PREPARED,stream and producer and consumer,producer writes and consumer reads stream,Not run; split into language and client cases,NOT_RUN,UNKNOWN
+R137,AWS SQS,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run; split into language and client cases,NOT_RUN,UNKNOWN
+R138,AWS SNS,NOT_PREPARED,topic and publisher and subscriber,publisher sends and subscriber receives,Not run; split into language and client cases,NOT_RUN,UNKNOWN
+R139,MSMQ,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run; split into language and client cases,NOT_RUN,UNKNOWN
+R140,Vector databases,NOT_PREPARED,vector collection and client operations,client reads or writes vector collection,Not run; identify supported engines and client libraries,NOT_RUN,UNKNOWN
+R141,Azure Blob,NOT_PREPARED,blob container and client operations,client reads or writes container,Not run; split into language and client cases,NOT_RUN,UNKNOWN
+R142,REST interaction,NOT_PREPARED,REST endpoint and handler and consumer,handler exposes endpoint and consumer calls it,Not run; needs separate producer and consumer cases,NOT_RUN,UNKNOWN
+R143,GraphQL interaction,NOT_PREPARED,GraphQL operation and resolver and consumer,resolver exposes operation and consumer calls it,Not run; needs separate producer and consumer cases,NOT_RUN,UNKNOWN
+R144,gRPC interaction,NOT_PREPARED,gRPC operation and handler and consumer,handler implements operation and consumer calls it,Not run; needs separate producer and consumer cases,NOT_RUN,UNKNOWN
+R145,Topic interaction,NOT_PREPARED,topic and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R146,Queue interaction,NOT_PREPARED,queue and producer and consumer,producer sends and consumer receives,Not run,NOT_RUN,UNKNOWN
+R147,Table interaction,NOT_PREPARED,table and reader and writer,reader reads and writer writes table,Not run,NOT_RUN,UNKNOWN
+R148,Collection interaction,NOT_PREPARED,collection and reader and writer,reader reads and writer writes collection,Not run,NOT_RUN,UNKNOWN
+R149,Index interaction,NOT_PREPARED,index and operations,operations reference index,Not run; confirm supported semantics,NOT_RUN,UNKNOWN
+R150,Event catalogue interaction,NOT_PREPARED,event and publisher and consumer,publisher emits and consumer receives event,Not run; confirm supported semantics,NOT_RUN,UNKNOWN
+R151,SDK interaction,NOT_PREPARED,SDK client and target resource,client invokes target resource,Not run; confirm supported semantics,NOT_RUN,UNKNOWN
