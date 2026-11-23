@@ -1,0 +1,14 @@
+{
+  "name": "ecg-order-api-fixture",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@azure/service-bus": "^7.9.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "typescript": "^5.7.3"
+  }
+}

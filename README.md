@@ -17,10 +17,15 @@ been installed or built. A basic positive case is not complete coverage of a
 framework or its edge cases; negative controls and variant cases are still
 needed. See `NOT_PREPARED` matrix rows for the remaining scope.
 
-Run `python -m unittest discover -s tests` from the repository
-root to check matrix structure, referenced fixture directories and Python,
-XML and JSON syntax. These checks do not run ECG or validate the other source
-languages against their framework dependencies.
+[Order lifecycle](scenarios/order_lifecycle/README.md) adds deeper
+multi-file examples for the priority release technologies. Its
+[assertions](scenarios/order_lifecycle/assertions.json) contain explicit
+positive and negative logical graph checks; all remain unexecuted.
+
+Run `python -m unittest discover -s tests` from the repository root to check
+matrix structure, referenced fixture directories, source assertion anchors,
+event-schema behavior and Python/XML/JSON syntax. These checks do not run ECG
+or validate the other source languages against their framework dependencies.
 
 The source-specific rows specify the *logical* facts expected from the graph.
 They do **not** assert particular ECG node kinds, node IDs or edge labels:

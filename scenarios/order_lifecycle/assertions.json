@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "status": "NOT_RUN",
+  "assertions": [
+    {
+      "id": "OL-EJB-01",
+      "matrix_id": "R01",
+      "expectation": "present",
+      "relationship": "ejb_injection_and_call",
+      "source": {"file": "java_legacy/src/main/java/example/legacy/OrderView.java", "anchor": "workflow.submit(orderId, amount)"},
+      "target": {"file": "java_legacy/src/main/java/example/legacy/OrderWorkflowBean.java", "anchor": "public String submit(String orderId, int amount)"},
+      "note": "The declared local interface resolves to its bean implementation; confirm ECG contract."
+    },
+    {
+      "id": "OL-EJB-02",
+      "matrix_id": "R01",
+      "expectation": "present",
+      "relationship": "ejb_injection_and_call",
+      "source": {"file": "java_legacy/src/main/java/example/legacy/OrderWorkflowBean.java", "anchor": "inventory.reserve(orderId)"},
+      "target": {"file": "java_legacy/src/main/java/example/legacy/InventoryBean.java", "anchor": "public boolean reserve(String orderId)"},
+      "note": "Cross-bean local interface call inside the transaction."
+    },
+    {
+      "id": "OL-EJB-03",
+      "matrix_id": "R01",
+      "expectation": "absent",
+      "relationship": "ejb_injection_and_call",
+      "source": {"file": "java_legacy/src/main/java/example/legacy/OrderView.java", "anchor": "workflow.submit(orderId, amount)"},
+      "target": {"file": "java_legacy/src/main/java/example/legacy/Decoy.java", "anchor": "public String submit(String orderId, int amount)"},
+      "note": "Same method name alone must not create this relationship."
+    },
+    {
+      "id": "OL-JSF-01",
+      "matrix_id": "R02",
+      "expectation": "present",
+      "relationship": "view_action_to_method",
+      "source": {"file": "java_legacy/src/main/webapp/order.xhtml", "anchor": "#{orderView.submit}"},
+      "target": {"file": "java_legacy/src/main/java/example/legacy/OrderView.java", "anchor": "public String submit()"},
+      "note": "Action is nested inside a form with AJAX."
+    },
+    {
+      "id": "OL-JSF-02",
+      "matrix_id": "R02",
+      "expectation": "present",
+      "relationship": "view_value_to_property",
+      "source": {"file": "java_legacy/src/main/webapp/order.xhtml", "anchor": "#{orderView.amount}"},
+      "target": {"file": "java_legacy/src/main/java/example/legacy/OrderView.java", "anchor": "setAmount(int amount)"},
+      "note": "Value binding appears on an input with a nested validator."
+    },
+    {
+      "id": "OL-JSF-03",
+      "matrix_id": "R02",
+      "expectation": "absent",
+      "relationship": "view_action_to_method",
+      "source": {"file": "java_legacy/src/main/webapp/order.xhtml", "anchor": "#{orderView.submit}"},
+      "target": {"file": "java_legacy/src/main/java/example/legacy/Decoy.java", "anchor": "public String submit(String orderId, int amount)"},
+      "note": "The unrelated submit method is not the named bean action."
+    },
+    {
+      "id": "OL-ASB-01",
+      "matrix_id": "R03",
+      "expectation": "present",
+      "relationship": "publisher_to_topic",
+      "source": {"file": "python_events/publisher.py", "anchor": "def publish_order(client: ServiceBusClient, event: OrderCreated)"},
+      "target": {"file": "python_events/publisher.py", "anchor": "topic_name=\"order-events\""},
+      "note": "Topic sender publishes an order.created message."
+    },
+    {
+      "id": "OL-ASB-02",
+      "matrix_id": "R03",
+      "expectation": "present",
+      "relationship": "subscription_to_topic",
+      "source": {"file": "python_events/consumer.py", "anchor": "def receive_orders(client: ServiceBusClient)"},
+      "target": {"file": "python_events/consumer.py", "anchor": "topic_name=\"order-events\", subscription_name=\"fulfilment\""},
+      "note": "Subscription receives from the same named topic; producer and consumer are in the same fixture application."
+    },
+    {
+      "id": "OL-ASB-03",
+      "matrix_id": "R03",
+      "expectation": "absent",
+      "relationship": "publisher_to_topic",
+      "source": {"file": "python_events/decoy.py", "anchor": "def publish_order(event: str)"},
+      "target": {"file": "python_events/publisher.py", "anchor": "topic_name=\"order-events\""},
+      "note": "Name collision is not a Service Bus producer."
+    },
+    {
+      "id": "OL-ASB-04",
+      "matrix_id": "R152",
+      "expectation": "present",
+      "relationship": "publisher_and_subscription_share_topic",
+      "source": {"file": "typescript_orders/src/order-events.ts", "anchor": "client.createSender(\"order-events\")"},
+      "target": {"file": "python_events/consumer.py", "anchor": "topic_name=\"order-events\", subscription_name=\"fulfilment\""},
+      "note": "Requires distinct applications or sourcesets and explicit matching Service Bus namespace; topic text alone is insufficient to identify a shared broker."
+    },
+    {
+      "id": "OL-MONGO-01",
+      "matrix_id": "R04",
+      "expectation": "present",
+      "relationship": "writes_collection",
+      "source": {"file": "typescript_orders/src/order-repository.ts", "anchor": "OrderModel.create(order)"},
+      "target": {"file": "typescript_orders/src/order-model.ts", "anchor": "\"lifecycle_orders\""},
+      "note": "Follow the imported Mongoose model to its explicit collection."
+    },
+    {
+      "id": "OL-MONGO-02",
+      "matrix_id": "R04",
+      "expectation": "present",
+      "relationship": "reads_collection",
+      "source": {"file": "typescript_orders/src/order-repository.ts", "anchor": "OrderModel.findOne({ orderId })"},
+      "target": {"file": "typescript_orders/src/order-model.ts", "anchor": "\"lifecycle_orders\""},
+      "note": "Read is chained through lean and exec."
+    },
+    {
+      "id": "OL-MONGO-03",
+      "matrix_id": "R04",
+      "expectation": "absent",
+      "relationship": "reads_collection",
+      "source": {"file": "typescript_orders/src/decoy.ts", "anchor": "export function findOrder(orderId: string)"},
+      "target": {"file": "typescript_orders/src/order-model.ts", "anchor": "\"lifecycle_orders\""},
+      "note": "Same function name in another module is not a collection read."
+    },
+    {
+      "id": "OL-GORM-01",
+      "matrix_id": "R05",
+      "expectation": "present",
+      "relationship": "writes_table",
+      "source": {"file": "go_inventory/inventory/repository.go", "anchor": "tx.Create(&Reservation"},
+      "target": {"file": "go_inventory/inventory/model.go", "anchor": "return \"inventory_reservations\""},
+      "note": "Write is inside a GORM transaction and uses an explicit TableName."
+    },
+    {
+      "id": "OL-GORM-02",
+      "matrix_id": "R05",
+      "expectation": "present",
+      "relationship": "reads_table",
+      "source": {"file": "go_inventory/inventory/repository.go", "anchor": ".First(&reservation)"},
+      "target": {"file": "go_inventory/inventory/model.go", "anchor": "return \"inventory_reservations\""},
+      "note": "Follow the typed model through context and Where chaining."
+    },
+    {
+      "id": "OL-KOTLIN-01",
+      "matrix_id": "R06",
+      "expectation": "present",
+      "relationship": "route_to_handler",
+      "source": {"file": "kotlin_orders/src/main/kotlin/example/orders/OrderController.kt", "anchor": "@GetMapping(\"/{orderId}\")"},
+      "target": {"file": "kotlin_orders/src/main/kotlin/example/orders/OrderController.kt", "anchor": "fun get(@PathVariable orderId: String)"},
+      "note": "Expected full route is GET /api/v2/orders/{orderId}; combine the class prefix."
+    },
+    {
+      "id": "OL-KOTLIN-02",
+      "matrix_id": "R06",
+      "expectation": "present",
+      "relationship": "calls",
+      "source": {"file": "kotlin_orders/src/main/kotlin/example/orders/OrderController.kt", "anchor": "service.create(order)"},
+      "target": {"file": "kotlin_orders/src/main/kotlin/example/orders/OrderService.kt", "anchor": "fun create(order: CreateOrder)"},
+      "note": "Constructor-injected service call."
+    },
+    {
+      "id": "OL-JCL-01",
+      "matrix_id": "R07",
+      "expectation": "present",
+      "relationship": "step_invokes_program",
+      "source": {"file": "mainframe/ORDERBATCH.jcl", "anchor": "//PROCESS  EXEC PGM=ORDPROC"},
+      "target": {"file": "mainframe/ORDPROC.pli", "anchor": "ORDPROC: PROCEDURE OPTIONS(MAIN);"},
+      "note": "PROCESS follows conditional PRECHECK and references the PL/I program."
+    },
+    {
+      "id": "OL-PLI-01",
+      "matrix_id": "R08",
+      "expectation": "present",
+      "relationship": "dd_binds_program_file",
+      "source": {"file": "mainframe/ORDERBATCH.jcl", "anchor": "//OUTFILE  DD DSN=ECG.ORDER.PROCESSED"},
+      "target": {"file": "mainframe/ORDPROC.pli", "anchor": "WRITE FILE(OUTFILE) FROM(ORDER_RECORD);"},
+      "note": "DD name binds to the PL/I output file; confirm ECG contract."
+    },
+    {
+      "id": "OL-PLI-02",
+      "matrix_id": "R08",
+      "expectation": "absent",
+      "relationship": "dd_binds_program_file",
+      "source": {"file": "mainframe/ORDERBATCH.jcl", "anchor": "//CHECKOUT DD DSN=&&CHECKED"},
+      "target": {"file": "mainframe/ORDPROC.pli", "anchor": "WRITE FILE(OUTFILE) FROM(ORDER_RECORD);"},
+      "note": "CHECKOUT belongs to PRECHECK; do not bind it to PROCESS by dataset similarity."
+    }
+  ]
+}
