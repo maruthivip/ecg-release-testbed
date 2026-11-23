@@ -35,11 +35,9 @@ inventing a pass or treating an unspecified behavior as a defect.
 1. Complete missing fixtures, variants and negative controls. Confirm the
    expected node and edge semantics against the release specification and pin
    their exact forms in the matrix or a separate test definition.
-2. Record this repository's exact commit and configure ECG with an authorized
-   GitHub credential before ingesting it. ECG's existing automated provisioning
-   tool creates code sources without a credential and is documented for public
-   repositories; private-repository access must be configured separately.
-   Do not change a shared ECG environment without the owner's approval.
+2. Record this repository's exact commit before ingesting it. The public
+   repository can be ingested without a GitHub credential. Do not change a
+   shared ECG environment without the owner's approval.
 3. For R07/R08, ensure the JCL and PL/I files are in the same relevant scope.
    For R11, place the SQL writer and reader in **separate applications and
    sourcesets** that point to the same explicitly identified database/table;
