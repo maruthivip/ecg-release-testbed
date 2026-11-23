@@ -89,6 +89,24 @@ class PreparationTests(unittest.TestCase):
                     self.assertIn(case[endpoint]["anchor"], reference.read_text(encoding="utf-8"))
         self.assertEqual(expectations, {"present", "absent"})
 
+    def test_impact_questions_have_evidence(self):
+        scenario = ROOT / "scenarios" / "impact_lab"
+        document = json.loads((scenario / "questions.json").read_text(encoding="utf-8"))
+        self.assertEqual(document["schema_version"], 1)
+        ids = set()
+        for case in document["cases"]:
+            with self.subTest(case=case["id"]):
+                self.assertNotIn(case["id"], ids)
+                ids.add(case["id"])
+                for field in ("question", "expected", "required", "forbidden_claims", "evidence"):
+                    self.assertTrue(case[field], field)
+                for item in case["evidence"]:
+                    reference = (scenario / item["file"]).resolve()
+                    self.assertTrue(reference.is_relative_to(scenario.resolve()))
+                    self.assertTrue(reference.is_file())
+                    self.assertIn(item["anchor"], reference.read_text(encoding="utf-8"))
+        self.assertGreaterEqual(len(ids), 10)
+
 
 if __name__ == "__main__":
     unittest.main()

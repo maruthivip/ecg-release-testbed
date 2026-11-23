@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "IMPACT-01",
+      "category": "Multi-hop call chain",
+      "question": "Trace the successful order submission from Gateway.submit through validation, inventory, payment and persistence. Which event is created?",
+      "expected": "Gateway.submit calls OrderService.place_order. It validates OrderRequest, checks the store for a prior order, calls InventoryService.reserve, then PaymentService.authorize. If both succeed it calls OrderStore.save_with_event, inserting the order and an order.created version 1 outbox event for namespace commerce-prod and topic order-events in one SQLite transaction. Relay publication is a separate step, not an automatic call in place_order.",
+      "required": ["Gateway.submit", "place_order", "reserve", "authorize", "save_with_event", "commerce-prod", "order-events", "order.created"],
+      "forbidden_claims": ["Gateway directly publishes to Service Bus", "place_order calls Relay.publish_pending"],
+      "evidence": [{"file":"gateway.py","anchor":"self.orders.place_order(order)"},{"file":"order_service.py","anchor":"self.store.save_with_event(order, event)"},{"file":"order_store.py","anchor":"INSERT INTO outbox VALUES"}]
+    },
+    {
+      "id": "IMPACT-02",
+      "category": "Dependency direction",
+      "question": "If PaymentService.authorize changes its signature, which direct call site and upstream public entry point are affected? Is PaymentService a dependent of Gateway?",
+      "expected": "OrderService.place_order directly calls PaymentService.authorize(order.order_id, order.total_cents); Gateway.submit is an upstream caller of place_order and can be affected transitively. PaymentService is a dependency of OrderService and Gateway's flow, not a dependent of Gateway. Decoy.authorize has the same name but is unrelated.",
+      "required": ["OrderService.place_order", "PaymentService.authorize", "Gateway.submit", "dependency", "Decoy"],
+      "forbidden_claims": ["PaymentService depends on Gateway", "decoy.authorize is called by OrderService"],
+      "evidence": [{"file":"order_service.py","anchor":"self.payment.authorize(order.order_id, order.total_cents)"},{"file":"gateway.py","anchor":"self.orders.place_order(order)"},{"file":"decoy.py","anchor":"def authorize("}]
+    },
+    {
+      "id": "IMPACT-03",
+      "category": "Failure propagation",
+      "question": "What happens when payment is declined after inventory is reserved, and which actions do not occur?",
+      "expected": "After reserve succeeds, a false result from PaymentService.authorize triggers InventoryService.release(order_id) and returns payment_declined. The order and its outbox event are not saved, and no payment authorization is created by the declining implementation.",
+      "required": ["reserve", "authorize", "release", "payment_declined", "not saved"],
+      "forbidden_claims": ["outbox event is created after a decline"],
+      "evidence": [{"file":"order_service.py","anchor":"return \"payment_declined\""},{"file":"payment_service.py","anchor":"if total_cents > self.limit_cents:"}]
+    },
+    {
+      "id": "IMPACT-04",
+      "category": "Atomicity and compensation",
+      "question": "If inserting the outbox event fails after the order insert, what is rolled back and what compensations does the order service perform?",
+      "expected": "OrderStore.save_with_event executes the order and outbox inserts within one SQLite transaction; an outbox insertion exception rolls back the order insertion. OrderService catches the persistence exception, voids the payment authorization, releases the inventory reservation, and re-raises the error. This is in-process compensation, not a distributed transaction guarantee.",
+      "required": ["SQLite transaction", "rolls back", "void", "release", "re-raises"],
+      "forbidden_claims": ["distributed transaction guarantees atomicity"],
+      "evidence": [{"file":"order_store.py","anchor":"with self.lock, self.db:"},{"file":"order_service.py","anchor":"self.payment.void(order.order_id)"}]
+    },
+    {
+      "id": "IMPACT-05",
+      "category": "Idempotency and conflict",
+      "question": "What happens if the exact same order is submitted twice, and what if its quantity changes under the same ID?",
+      "expected": "The second identical submission finds the stored tuple and returns accepted without calling inventory reserve or payment authorize again and without creating a second event. A request using the same order ID with different sku, quantity or total raises ValueError('order conflict').",
+      "required": ["accepted", "order conflict", "no second", "outbox"],
+      "forbidden_claims": ["a duplicate produces another outbox event"],
+      "evidence": [{"file":"order_service.py","anchor":"raise ValueError(\"order conflict\")"},{"file":"order_service.py","anchor":"prior = self.store.get(order.order_id)"}]
+    },
+    {
+      "id": "IMPACT-06",
+      "category": "Event replay",
+      "question": "If Relay.publish_pending is called twice with FulfilmentConsumer.handle, how many times is an order appended and why?",
+      "expected": "Relay reads and republishes all outbox events on every invocation; it does not mark events delivered. FulfilmentConsumer checks namespace commerce-prod, topic order-events, kind order.created and version 1, then suppresses duplicate event IDs. Therefore the same event appends its order ID once to that consumer instance.",
+      "required": ["republishes", "event_id", "once", "commerce-prod", "version"],
+      "forbidden_claims": ["Relay marks the outbox delivered", "exactly-once delivery is guaranteed across restarts"],
+      "evidence": [{"file":"event_relay.py","anchor":"for event in self.store.events():"},{"file":"event_relay.py","anchor":"if event.event_id in self.processed:"}]
+    },
+    {
+      "id": "IMPACT-07",
+      "category": "False-positive namespace trap",
+      "question": "Does the commerce-prod order.created event reach AuditConsumer simply because both use the order-events topic?",
+      "expected": "No. FulfilmentConsumer accepts namespace commerce-prod while AuditConsumer accepts audit-sandbox. AuditConsumer rejects the commerce-prod event despite the matching topic and kind. It accepts a matching audit-sandbox event when explicitly called.",
+      "required": ["commerce-prod", "audit-sandbox", "rejects"],
+      "forbidden_claims": ["matching topic proves AuditConsumer consumes the commerce-prod event"],
+      "evidence": [{"file":"event_relay.py","anchor":"\"audit-sandbox\", \"order-events\", \"order.created\""},{"file":"event_relay.py","anchor":"\"commerce-prod\", \"order-events\", \"order.created\", 1"}]
+    },
+    {
+      "id": "IMPACT-08",
+      "category": "Direct versus transitive impact",
+      "question": "If OrderStore.get changes, which methods directly call it and which user entry point reaches it transitively?",
+      "expected": "OrderService.place_order and reporting.lookup_order directly call OrderStore.get. Gateway.submit calls place_order and is a transitive caller. Reporting is not called by Gateway or place_order, and inventory and payment are downstream dependencies rather than callers of get.",
+      "required": ["OrderService.place_order", "reporting.lookup_order", "Gateway.submit", "transitive"],
+      "forbidden_claims": ["Gateway calls reporting.lookup_order", "PaymentService calls OrderStore.get"],
+      "evidence": [{"file":"reporting.py","anchor":"return store.get(order_id)"},{"file":"order_service.py","anchor":"prior = self.store.get(order.order_id)"},{"file":"gateway.py","anchor":"self.orders.place_order(order)"}]
+    },
+    {
+      "id": "IMPACT-09",
+      "category": "Error propagation",
+      "question": "How does place_order behave if PaymentService.authorize raises an exception, compared with a false return?",
+      "expected": "If authorize raises, OrderService releases the inventory reservation and re-raises the exception. If authorize returns false, it releases inventory and returns payment_declined. Neither branch reaches save_with_event.",
+      "required": ["release", "re-raises", "payment_declined", "save_with_event"],
+      "forbidden_claims": ["exceptions are silently converted to accepted"],
+      "evidence": [{"file":"order_service.py","anchor":"except Exception:"},{"file":"order_service.py","anchor":"return \"payment_declined\""}]
+    },
+    {
+      "id": "IMPACT-10",
+      "category": "Change impact / event schema",
+      "question": "What source consumers would be affected by changing the created event's version from 1 to 2, and what cannot be inferred?",
+      "expected": "FulfilmentConsumer requires version 1 and would reject version 2 until updated. AuditConsumer filters namespace, topic and kind but does not check version; it would still reject the commerce-prod event due to its audit-sandbox namespace. No deployed broker, cross-application delivery, or external consumer is established by this fixture.",
+      "required": ["FulfilmentConsumer", "version 1", "AuditConsumer", "audit-sandbox", "no deployed broker"],
+      "forbidden_claims": ["AuditConsumer checks version", "external subscribers are proven impacted"],
+      "evidence": [{"file":"event_relay.py","anchor":"\"commerce-prod\", \"order-events\", \"order.created\", 1"},{"file":"event_relay.py","anchor":"\"audit-sandbox\", \"order-events\", \"order.created\""},{"file":"order_service.py","anchor":"version=1"}]
+    },
+    {
+      "id": "IMPACT-11",
+      "category": "False-positive function name",
+      "question": "Is scenarios/impact_lab/decoy.py place_order part of the gateway order placement flow?",
+      "expected": "No. Gateway holds an OrderService and calls its place_order(OrderRequest) method. The separate decoy.place_order accepts an order ID and returns a no-side-effects string; it is not imported or called by Gateway.",
+      "required": ["OrderService", "decoy", "not called"],
+      "forbidden_claims": ["Gateway calls decoy.place_order"],
+      "evidence": [{"file":"gateway.py","anchor":"self.orders.place_order(order)"},{"file":"decoy.py","anchor":"def place_order(order_id: str)"}]
+    },
+    {
+      "id": "IMPACT-12",
+      "category": "Grounded limitation",
+      "question": "Does the impact lab demonstrate real cross-service HTTP calls or a deployed Service Bus integration?",
+      "expected": "No. The services are Python objects invoked in process, SQLite is in memory, and Relay.publish_pending accepts an injected callback. No HTTP transport, deployed message broker or live Azure Service Bus integration is implemented here.",
+      "required": ["in process", "SQLite", "callback", "no HTTP", "no deployed broker"],
+      "forbidden_claims": ["real network calls are demonstrated"],
+      "evidence": [{"file":"README.md","anchor":"in-process"},{"file":"event_relay.py","anchor":"publish(event)"},{"file":"order_store.py","anchor":"sqlite3.connect(\":memory:\""}]
+    }
+  ]
+}

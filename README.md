@@ -22,6 +22,12 @@ multi-file examples for the priority release technologies. Its
 [assertions](scenarios/order_lifecycle/assertions.json) contain explicit
 positive and negative logical graph checks; all remain unexecuted.
 
+[Impact lab](scenarios/impact_lab/README.md) exercises a runnable in-process
+orchestration with failure, rollback, event replay, dependency-direction and
+same-name/namespace traps. Its source-grounded questions include required and
+forbidden facts; it is not a deployed distributed system or a substitute for
+testing ECG cross-application ingestion and graph edges.
+
 Run `python -m unittest discover -s tests` from the repository root to check
 matrix structure, referenced fixture directories, source assertion anchors,
 event-schema behavior and Python/XML/JSON syntax. These checks do not run ECG
